@@ -1,0 +1,28 @@
+# Neovim generated files
+*.log
+.netrwhist
+
+# Plugin directories (if using non-lazy loading)
+plugin/packer_compiled.lua
+
+# Lazy.nvim lock file (uncomment if you want to ignore it)
+# lazy-lock.json
+
+# Session files
+*.vim.session
+Session.vim
+
+# Swap files
+*.swp
+*.swo
+*~
+
+# Backup files
+*.bak
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
