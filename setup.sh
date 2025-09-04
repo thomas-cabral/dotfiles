@@ -1,12 +1,13 @@
 #!/bin/bash
 
-# Hyprland Dotfiles Setup Script
+# Dotfiles Setup Script
 # This script creates symlinks from the dotfiles repo to ~/.config
 
-DOTFILES_DIR="$HOME/dotfiles/hyprland"
+DOTFILES_DIR="$HOME/dotfiles"
+HYPRLAND_DIR="$DOTFILES_DIR/hyprland"
 CONFIG_DIR="$HOME/.config"
 
-echo "Setting up Hyprland dotfiles..."
+echo "Setting up dotfiles..."
 
 # Backup existing configs if they exist and aren't symlinks
 backup_if_exists() {
@@ -35,10 +36,13 @@ create_symlink() {
 }
 
 # Hyprland configs
-create_symlink "$DOTFILES_DIR/hypr" "$CONFIG_DIR/hypr"
-create_symlink "$DOTFILES_DIR/waybar" "$CONFIG_DIR/waybar"
-create_symlink "$DOTFILES_DIR/wlogout" "$CONFIG_DIR/wlogout"
-create_symlink "$DOTFILES_DIR/wofi" "$CONFIG_DIR/wofi"
+create_symlink "$HYPRLAND_DIR/hypr" "$CONFIG_DIR/hypr"
+create_symlink "$HYPRLAND_DIR/waybar" "$CONFIG_DIR/waybar"
+create_symlink "$HYPRLAND_DIR/wlogout" "$CONFIG_DIR/wlogout"
+create_symlink "$HYPRLAND_DIR/wofi" "$CONFIG_DIR/wofi"
+
+# Neovim config
+create_symlink "$DOTFILES_DIR/nvim" "$CONFIG_DIR/nvim"
 
 echo "Dotfiles setup complete!"
 echo ""
