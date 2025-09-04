@@ -129,6 +129,13 @@ window#waybar.hidden {
     padding: 6px;
 }
 
+#custom-gpu {
+    color: #a6e3a1;
+    background-color: #111827;
+    padding: 6px;
+    border-radius: 14px;
+}
+
 #memory {
     color: #ebcb8b;
     background-color: #111827;

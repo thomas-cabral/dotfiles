@@ -36,6 +36,7 @@
         "custom/ccusage",
         "memory",
         "cpu",
+        "custom/gpu",
         "battery",
         //"pulseaudio",
         "wireplumber",
@@ -179,7 +180,7 @@
         "format-alt": "{alt}: {}",
         "format-alt-click": "click-right",
         "interval": 3600,
-        "exec": "curl -s 'https://wttr.in/34452?format=1'",
+        "exec": "curl -s 'https://wttr.in/?format=1'",
         //"return-type": "json",
         //"exec": "~/.config/waybar/modules/weather.sh",
         "exec-if": "ping wttr.in -c1"
@@ -264,6 +265,16 @@
         "interval": 1,
         //"format": " {}%", // Icon: microchip
         "format": "{max_frequency}GHz <span color=\"darkgray\">| {usage}%</span>",
+        "max-length": 13,
+        "min-length": 13
+    },
+
+    "custom/gpu": {
+        "exec": "~/.config/waybar/scripts/gpu.sh",
+        "return-type": "json",
+        "interval": 2,
+        "format": "󰍛 {}",
+        "on-click": "nvidia-settings",
         "max-length": 13,
         "min-length": 13
     },
