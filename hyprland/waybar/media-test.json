@@ -1,0 +1,8 @@
+"custom/spotify": {
+    "exec": "playerctl -F metadata --format '{{ artist }} - {{ title }}' 2>/dev/null",
+    "format": "{}  ",
+    "max-length": 40,
+    "on-click": "bash -c 'playerctl play-pause'",
+    "on-scroll-up": "bash -c 'playerctl next'",
+    "on-scroll-down": "bash -c 'playerctl previous'"
+},
