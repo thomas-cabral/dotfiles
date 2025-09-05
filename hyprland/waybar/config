@@ -200,9 +200,9 @@
     "exec": "~/.config/waybar/mediaplayer.py --player spotify",
     "format": "{}  ",
     "return-type": "json",
-    "on-click": "playerctl play-pause",
-    "on-scroll-up": "playerctl next",
-    "on-scroll-down": "playerctl previous"
+    "on-click": "playerctl -p spotify play-pause",
+    "on-scroll-up": "playerctl -p spotify next",
+    "on-scroll-down": "playerctl -p spotify previous"
 },
 
     "custom/media": {

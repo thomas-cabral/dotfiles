@@ -6,11 +6,12 @@ if command -v nvidia-smi &> /dev/null; then
     gpu_usage=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits | head -n1)
     gpu_temp=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits | head -n1)
     gpu_mem=$(nvidia-smi --query-gpu=memory.used,memory.total --format=csv,noheader,nounits | head -n1)
+    gpu_fan=$(nvidia-smi --query-gpu=fan.speed --format=csv,noheader,nounits | head -n1)
     mem_used=$(echo $gpu_mem | cut -d',' -f1 | xargs)
     mem_total=$(echo $gpu_mem | cut -d',' -f2 | xargs)
     mem_percent=$((mem_used * 100 / mem_total))
     
-    echo "{\"text\": \"GPU ${gpu_usage}%\", \"tooltip\": \"GPU Usage: ${gpu_usage}%\\nTemperature: ${gpu_temp}°C\\nMemory: ${mem_used}MB / ${mem_total}MB (${mem_percent}%)\"}"
+    echo "{\"text\": \"GPU ${gpu_usage}%\", \"tooltip\": \"GPU Usage: ${gpu_usage}%\\nTemperature: ${gpu_temp}°C\\nFan Speed: ${gpu_fan}%\\nMemory: ${mem_used}MB / ${mem_total}MB (${mem_percent}%)\"}"
     
 # Check for AMD GPU
 elif [ -f /sys/class/drm/card0/device/gpu_busy_percent ]; then
@@ -24,14 +25,31 @@ elif [ -f /sys/class/drm/card0/device/gpu_busy_percent ]; then
         gpu_temp="N/A"
     fi
     
+    # Try to get fan speed (PWM)
+    gpu_fan="N/A"
+    if [ -f /sys/class/drm/card0/device/hwmon/hwmon*/pwm1 ]; then
+        fan_pwm=$(cat /sys/class/drm/card0/device/hwmon/hwmon*/pwm1 2>/dev/null)
+        if [ -n "$fan_pwm" ]; then
+            gpu_fan=$((fan_pwm * 100 / 255))
+        fi
+    fi
+    
     # Try to get memory usage
     if [ -f /sys/class/drm/card0/device/mem_info_vram_used ] && [ -f /sys/class/drm/card0/device/mem_info_vram_total ]; then
         mem_used=$(($(cat /sys/class/drm/card0/device/mem_info_vram_used) / 1048576))
         mem_total=$(($(cat /sys/class/drm/card0/device/mem_info_vram_total) / 1048576))
         mem_percent=$((mem_used * 100 / mem_total))
-        echo "{\"text\": \"GPU ${gpu_usage}%\", \"tooltip\": \"GPU Usage: ${gpu_usage}%\\nTemperature: ${gpu_temp}°C\\nMemory: ${mem_used}MB / ${mem_total}MB (${mem_percent}%)\"}"
+        if [ "$gpu_fan" != "N/A" ]; then
+            echo "{\"text\": \"GPU ${gpu_usage}%\", \"tooltip\": \"GPU Usage: ${gpu_usage}%\\nTemperature: ${gpu_temp}°C\\nFan Speed: ${gpu_fan}%\\nMemory: ${mem_used}MB / ${mem_total}MB (${mem_percent}%)\"}"
+        else
+            echo "{\"text\": \"GPU ${gpu_usage}%\", \"tooltip\": \"GPU Usage: ${gpu_usage}%\\nTemperature: ${gpu_temp}°C\\nMemory: ${mem_used}MB / ${mem_total}MB (${mem_percent}%)\"}"
+        fi
     else
-        echo "{\"text\": \"GPU ${gpu_usage}%\", \"tooltip\": \"GPU Usage: ${gpu_usage}%\\nTemperature: ${gpu_temp}°C\"}"
+        if [ "$gpu_fan" != "N/A" ]; then
+            echo "{\"text\": \"GPU ${gpu_usage}%\", \"tooltip\": \"GPU Usage: ${gpu_usage}%\\nTemperature: ${gpu_temp}°C\\nFan Speed: ${gpu_fan}%\"}"
+        else
+            echo "{\"text\": \"GPU ${gpu_usage}%\", \"tooltip\": \"GPU Usage: ${gpu_usage}%\\nTemperature: ${gpu_temp}°C\"}"
+        fi
     fi
     
 # Intel GPU fallback
