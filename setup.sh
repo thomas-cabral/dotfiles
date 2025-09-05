@@ -44,6 +44,9 @@ create_symlink "$HYPRLAND_DIR/wofi" "$CONFIG_DIR/wofi"
 # Neovim config
 create_symlink "$DOTFILES_DIR/nvim" "$CONFIG_DIR/nvim"
 
+# WezTerm config (goes in home directory, not .config)
+create_symlink "$DOTFILES_DIR/.wezterm.lua" "$HOME/.wezterm.lua"
+
 echo "Dotfiles setup complete!"
 echo ""
 echo "To add more configs to the repo:"
